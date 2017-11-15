@@ -51,52 +51,6 @@ def gaborFilter(image, orientations, frequencies, w=16):
 
 return utils.normalize(result)
 
-
-def gaborFilterSubdivide(image, orientations, frequencies, rect=None):
-    if rect:
-        y, x, h, w = rect
-    else:
-        y, x = 0, 0
-        h, w = image.shape
-    
-    result = np.empty((h, w))
-
-orientation, deviation = utils.averageOrientation(
-                                                  orientations[y:y + h, x:x + w], deviation=True)
-    
-    if (deviation < 0.2 and h < 50 and w < 50) or h < 6 or w < 6:
-        
-        frequency = utils.averageFrequency(frequencies[y:y + h, x:x + w])
-        
-        if frequency < 0.0:
-            result = image[y:y + h, x:x + w]
-        else:
-            kernel = gaborKernel(16, orientation, frequency)
-            result = utils.convolve(image, kernel, (y, x), (h, w))
-
-else:
-    if h > w:
-        hh = h // 2
-            
-            result[0:hh, 0:w] = \
-                gaborFilterSubdivide(image, orientations, frequencies, (y, x, hh, w))
-            
-            result[hh:h, 0:w] = \
-                gaborFilterSubdivide(image, orientations, frequencies, (y + hh, x, h - hh, w))
-        else:
-            hw = w // 2
-            
-            result[0:h, 0:hw] = \
-                gaborFilterSubdivide(image, orientations, frequencies, (y, x, h, hw))
-            
-            result[0:h, hw:w] = \
-                gaborFilterSubdivide(image, orientations, frequencies, (y, x + hw, h, w - hw))
-
-if w > 20 and h > 20:
-    result = utils.normalize(result)
-    
-    return result
-
 def skeletonize(img):
     size = np.size(img)
     skel = np.zeros(img.shape, np.uint8)
@@ -158,15 +112,15 @@ if __name__ == '__main__':
                         image = np.where(mask == 1.0, utils.binarize(image,16), 1.0)
                         utils.showImage(image, "binarized")
                         
-                        destinationImage = "yayahahah.BMP"
+                        destinationImage = "output.BMP"
                         # save result image
                         misc.imsave(destinationImage, image)
                         
                         # reread the image in cv2 format
-                        img = cv2.imread('yayahahah.BMP', 0)
+                        img = cv2.imread('output.BMP', 0)
                         skel = skeletonize(img)
                         cv2.imshow("skeleton", skel)
-                        #show all image during the process
+                        # show all image during all processes
                         plt.show()
                         
                         cv2.waitKey(0)
