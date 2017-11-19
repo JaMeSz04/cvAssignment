@@ -11,27 +11,27 @@ import math
 
 # In[2]:
 
-img = cv2.imread('test.jpg',cv2.IMREAD_GRAYSCALE)
+img = cv2.imread('./minute_example/Input.jpg',cv2.IMREAD_GRAYSCALE)
 
 
-# In[4]:
+# In[3]:
 
 
 ret,img = cv2.threshold(img,127,255,cv2.THRESH_BINARY)
 img = cv2.copyMakeBorder(img,1,1,1,1,cv2.BORDER_CONSTANT,value = 50)
 
 
-# In[5]:
+# In[4]:
 
 row,col = img.shape
 
 
-# In[6]:
+# In[5]:
 
 offset = [(-1, -1), (-1, 0), (-1, 1), (0, 1), (1, 1), (1, 0), (1, -1), (0, -1), (-1, -1)]
 
 
-# In[8]:
+# In[6]:
 
 crossingCount = 0
 mnPoints1 = []
@@ -46,9 +46,7 @@ for x in tqdm(range (row)):
             for nb in range(0,8):
                 if(int(values[nb]) + int(values[nb+1])==255 ):
                     crossingCount +=1
-
             crossingCount /= 2
-            
             if (crossingCount ==3 ):
                 mnPoints3.append((x,y))
             elif (crossingCount ==1 ):
@@ -57,37 +55,20 @@ for x in tqdm(range (row)):
             elif (crossingCount ==4 ):
                 mnPoints4.append((x,y))
            # print crossingCount
-            crossingCount = 0
-            
-                    
-                
-                
-            
-    
-             
+            crossingCount = 0    
 
 
-# In[9]:
+# In[7]:
 
 mnPoints = mnPoints1+mnPoints3
 
 
-# In[10]:
-
-len(mnPoints1),len(mnPoints3),len(mnPoints4),len(mnPoints)
-
-
-# In[11]:
+# In[8]:
 
 rgbImg = cv2.cvtColor(img,cv2.COLOR_GRAY2RGB)
 
 
-# In[12]:
-
-##remove incorrect feature
-
-
-# In[13]:
+# In[9]:
 
 someMn = []
 for coor in mnPoints:
@@ -113,12 +94,7 @@ for coor in mnPoints:
         
 
 
-# In[14]:
-
-len(someMn)
-
-
-# In[15]:
+# In[10]:
 
 for coor in someMn:
     for x in range (-5,5):
@@ -127,27 +103,28 @@ for coor in someMn:
         rgbImg[coor[0],coor[1]+y] = (0,0,255)
 
 
-# In[16]:
+# In[11]:
 
 allPoints = cv2.cvtColor(img,cv2.COLOR_GRAY2RGB)
 
 
-# In[17]:
-
+# In[12]:
 
 for coor in mnPoints1:
     for x in range (-5,5):
         allPoints[coor[0]+x,coor[1]] = (0,0,255) 
     for y in range (-5,5):
         allPoints[coor[0],coor[1]+y] = (0,0,255)
-        
 for coor in mnPoints3:
     for x in range (-5,5):
         allPoints[coor[0]+x,coor[1]] = (255,0,0) 
     for y in range (-5,5):
-        allPoints[coor[0],coor[1]+y] = (255,0,0)
+        allPoints[coor[0],coor[1]+y] = (255,0,0)   
 
-    
+
+# In[13]:
+
+cv2.imwrite("./minute_example/Output.jpg",rgbImg)
 
 
 # In[ ]:
