@@ -6,31 +6,32 @@
 import cv2
 import numpy as np
 from tqdm import tqdm
+import math
 
 
 # In[2]:
 
-img = cv2.imread('./minute_example/Input.jpg',cv2.IMREAD_GRAYSCALE)
+img = cv2.imread('test.jpg',cv2.IMREAD_GRAYSCALE)
 
 
-# In[3]:
+# In[4]:
 
 
 ret,img = cv2.threshold(img,127,255,cv2.THRESH_BINARY)
 img = cv2.copyMakeBorder(img,1,1,1,1,cv2.BORDER_CONSTANT,value = 50)
 
 
-# In[4]:
+# In[5]:
 
 row,col = img.shape
 
 
-# In[5]:
+# In[6]:
 
 offset = [(-1, -1), (-1, 0), (-1, 1), (0, 1), (1, 1), (1, 0), (1, -1), (0, -1), (-1, -1)]
 
 
-# In[6]:
+# In[8]:
 
 crossingCount = 0
 mnPoints1 = []
@@ -66,36 +67,98 @@ for x in tqdm(range (row)):
              
 
 
-# In[7]:
-
-len(mnPoints1),len(mnPoints3),len(mnPoints4)
-
-
-# In[8]:
-
-rgbImg = cv2.cvtColor(img,cv2.COLOR_GRAY2RGB)
-
-
 # In[9]:
 
-for coor in mnPoints1:
-    for x in range (-5,5):
-        rgbImg[coor[0]+x,coor[1]] = (0,0,255) 
-    for y in range (-5,5):
-        rgbImg[coor[0],coor[1]+y] = (0,0,255)
-        
-for coor in mnPoints3:
-    for x in range (-5,5):
-        rgbImg[coor[0]+x,coor[1]] = (255,0,0) 
-    for y in range (-5,5):
-        rgbImg[coor[0],coor[1]+y] = (255,0,0)
-    
+mnPoints = mnPoints1+mnPoints3
 
 
 # In[10]:
 
-cv2.imwrite("./minute_example/Input.jpg",rbgImg)
+len(mnPoints1),len(mnPoints3),len(mnPoints4),len(mnPoints)
+
+
+# In[11]:
+
+rgbImg = cv2.cvtColor(img,cv2.COLOR_GRAY2RGB)
+
+
+# In[12]:
+
+##remove incorrect feature
+
+
+# In[13]:
+
+someMn = []
+for coor in mnPoints:
+    x = coor[0]
+    y = coor[1]
+    cMn1,cMn2,cMn3,cMn4 = False,False,False,False
+    
+    for xinter in range(x+1,row-1):
+        if(img[xinter,y]==0):
+            cMn1=True
+    for xinter in range(x-1,0,-1):
+        if(img[xinter,y]==0):
+            cMn2=True
+    
+    for yinter in range(y+1,col-1):
+        if(img[x,yinter]==0):
+            cMn3=True
+    for yinter in range(y-1,0,-1):
+        if(img[x,yinter]==0):
+            cMn4=True
+    if(cMn1 and cMn2 and cMn3 and cMn4):
+        someMn.append((x,y))
+        
+
+
+# In[14]:
+
+len(someMn)
+
+
+# In[15]:
+
+for coor in someMn:
+    for x in range (-5,5):
+        rgbImg[coor[0]+x,coor[1]] = (0,0,255) 
+    for y in range (-5,5):
+        rgbImg[coor[0],coor[1]+y] = (0,0,255)
+
+
+# In[16]:
+
+allPoints = cv2.cvtColor(img,cv2.COLOR_GRAY2RGB)
+
+
+# In[17]:
+
+
+for coor in mnPoints1:
+    for x in range (-5,5):
+        allPoints[coor[0]+x,coor[1]] = (0,0,255) 
+    for y in range (-5,5):
+        allPoints[coor[0],coor[1]+y] = (0,0,255)
+        
+for coor in mnPoints3:
+    for x in range (-5,5):
+        allPoints[coor[0]+x,coor[1]] = (255,0,0) 
+    for y in range (-5,5):
+        allPoints[coor[0],coor[1]+y] = (255,0,0)
+
+    
+
+
+# In[ ]:
 
 cv2.imshow('imgCross',rgbImg)
+cv2.imshow('allCross',allPoints)
+cv2.imshow('original',img)
 cv2.waitKey()
+
+
+# In[ ]:
+
+
 
