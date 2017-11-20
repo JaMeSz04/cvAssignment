@@ -11,7 +11,7 @@ import Utils as utils
 
 ## end: image segmentation part
 
-sourceImage = "input.png"
+# sourceImage = "segmented/1_1.BMP"
 
 #  modified from https://github.com/rtshadow/biometrics.git and https://github.com/tommythorsen/fingerprints
 ## begin: Fingerprint enhancement part
@@ -49,7 +49,7 @@ def gaborFilter(image, orientations, frequencies, w=16):
             kernel = gaborKernel(16, orientation, frequency)
             result[y:y + w, x:x + w] = utils.convolve(image, kernel, (y, x), (w, w))
 
-return utils.normalize(result)
+    return utils.normalize(result)
 
 def skeletonize(img):
     size = np.size(img)
@@ -71,62 +71,13 @@ def skeletonize(img):
             done = True
     return skel
 
-if __name__ == '__main__':
-    
-    np.set_printoptions(
-                        threshold=np.inf,
-                        precision=4,
-                        suppress=True)
-        
-                        print("Reading image")
-                        image = ndimage.imread(sourceImage, mode="L").astype("float64")
-                        utils.showImage(image, "original", vmax=255.0)
-                        
-                        print("Normalizing")
-                        image = utils.normalize(image)
-                        utils.showImage(image, "normalized")
-                        
-                        print("Finding mask")
-                        mask = utils.findMask(image)
-                        
-                        print("Applying local normalization")
-                        image = np.where(mask == 1.0, utils.localNormalize(image), image)
-                        utils.showImage(image, "locally normalized")
-                        
-                        print("Estimating orientations")
-                        orientations = np.where(mask == 1.0, utils.estimateOrientations(image), -1.0)
-                        utils.showOrientations(image, orientations, "orientations", 8)
-                        
-                        print("Estimating frequencies")
-                        frequencies = np.where(mask == 1.0, utils.estimateFrequencies(image, orientations), -1.0)
-                        
-                        print("Filtering")
-                        
-                        image = gaborFilter(image, orientations, frequencies)
-                        image = np.where(mask == 1.0, image, 1.0)
-                        # if options.images > 0:
-                        utils.showImage(image, "gabor")
-                        
-                        
-                        print("Binarizing")
-                        image = np.where(mask == 1.0, utils.binarize(image,16), 1.0)
-                        utils.showImage(image, "binarized")
-                        
-                        destinationImage = "output.BMP"
-                        # save result image
-                        misc.imsave(destinationImage, image)
-                        
-                        # reread the image in cv2 format
-                        img = cv2.imread('output.BMP', 0)
-                        skel = skeletonize(img)
-                        cv2.imshow("skeleton", skel)
-                        # show all image during all processes
-                        plt.show()
-                        
-                        cv2.waitKey(0)
-                        cv2.destroyAllWindows()
+def inverse(img):
+    neg = cv2.bitwise_not(img)
+    return neg
 
-## end: Fingerprint enhancement part
+    
+
+### end: Fingerprint enhancement part
 
 
 
