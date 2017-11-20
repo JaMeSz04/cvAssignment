@@ -3,6 +3,9 @@ import numpy as np
 import math
 from matplotlib import pyplot as plt
 
+
+EQUAL_TRESHOLD = 62.9
+
 def translate( coor, delta ):
     return ( coor[0] + delta[0] , coor[1] + delta[1] )
 
@@ -30,13 +33,10 @@ def checkORB(keyPoint1, keyPoint2):
     img2 = cv2.imread('minute_example/Input.jpg', 0)
     out2 = np.zeros(shape=(len(img), len(img)))
     orb2 = cv2.ORB_create()
-
     # find the keypoints with ORB
     kp = orb.detect(img, None)
-
     # find the keypoints with ORB
     kp2 = orb.detect(img2, None)
-
     # compute the descriptors with ORB
     kp, des = orb.compute(img, keyPoint1)
     # compute the descriptors with ORB
@@ -46,8 +46,17 @@ def checkORB(keyPoint1, keyPoint2):
     matches = bf.match(des, des2)
     matches = sorted(matches, key=lambda x: x.distance)
     #print(matches)
-
-    img3 = cv2.drawMatches(img, kp, img2, kp2, matches, out, flags=2)
+    print(evaluate(keyPoint1, matches, 50))
+    img3 = cv2.drawMatches(img, kp, img2, kp2, matches[:20], out, flags=2)
 
     plt.imshow(img3), plt.show()
+
+def evaluate(inp1, matches, percentage):
+    print((len(matches) / len(inp1)) * 100)
+    if (len(inp1) < len(matches)):
+        print("Something must be wrong!!!")
+        return
+    if ((len(matches) / len(inp1)) * 100 > percentage):
+        return True
+    return False
 

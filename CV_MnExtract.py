@@ -128,7 +128,6 @@ cv2.imwrite("./minute_example/Output.jpg",rgbImg)
 
 
 # In[ ]:
-print(someMn)
 kp1 = mm.gatherKeyPoints(someMn)
 kp2 = mm.gatherKeyPoints(someMn)
 mm.checkORB(kp1,kp2)
