@@ -7,6 +7,7 @@ import cv2
 import numpy as np
 from tqdm import tqdm
 import math
+import MnMatcher as mm
 
 
 # In[2]:
@@ -66,7 +67,6 @@ mnPoints = mnPoints1+mnPoints3
 # In[8]:
 
 rgbImg = cv2.cvtColor(img,cv2.COLOR_GRAY2RGB)
-
 
 # In[9]:
 
@@ -128,11 +128,14 @@ cv2.imwrite("./minute_example/Output.jpg",rgbImg)
 
 
 # In[ ]:
-
-cv2.imshow('imgCross',rgbImg)
-cv2.imshow('allCross',allPoints)
-cv2.imshow('original',img)
-cv2.waitKey()
+print(someMn)
+kp1 = mm.gatherKeyPoints(someMn)
+kp2 = mm.gatherKeyPoints(someMn)
+mm.checkORB(kp1,kp2)
+# cv2.imshow('imgCross',rgbImg)
+# cv2.imshow('allCross',allPoints)
+# cv2.imshow('original',img)
+# cv2.waitKey()
 
 
 # In[ ]:
