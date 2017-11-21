@@ -25,13 +25,12 @@ def isMatch(inp1, inp2):
 def gatherKeyPoints( vectors ):
     return [ cv2.KeyPoint(x[0], x[1], 31) for x in vectors]
 
-def checkORB(keyPoint1, keyPoint2):
+def checkORB(keyPoint1, keyPoint2, img, img2):
 
-    img = cv2.imread('minute_example/Input.jpg', 0)
     out = np.zeros(shape = (len(img), len(img)))
     orb = cv2.ORB_create()
-    img2 = cv2.imread('minute_example/Input.jpg', 0)
-    out2 = np.zeros(shape=(len(img), len(img)))
+
+    out2 = np.zeros(shape=(len(img2), len(img2)))
     orb2 = cv2.ORB_create()
     # find the keypoints with ORB
     kp = orb.detect(img, None)
@@ -40,16 +39,17 @@ def checkORB(keyPoint1, keyPoint2):
     # compute the descriptors with ORB
     kp, des = orb.compute(img, keyPoint1)
     # compute the descriptors with ORB
-    kp2, des2 = orb.compute(img, keyPoint2)
+    kp2, des2 = orb.compute(img2, keyPoint2)
 
     bf = cv2.BFMatcher(cv2.NORM_HAMMING, crossCheck=True)
     matches = bf.match(des, des2)
     matches = sorted(matches, key=lambda x: x.distance)
     #print(matches)
-    print(evaluate(keyPoint1, matches, 50))
-    img3 = cv2.drawMatches(img, kp, img2, kp2, matches[:20], out, flags=2)
 
-    plt.imshow(img3), plt.show()
+    img3 = cv2.drawMatches(img, kp, img2, kp2, matches[:30], out, flags=2)
+
+    #plt.imshow(img3), plt.show()
+    return evaluate(keyPoint1, matches, 50)
 
 def evaluate(inp1, matches, percentage):
     print((len(matches) / len(inp1)) * 100)
@@ -57,6 +57,6 @@ def evaluate(inp1, matches, percentage):
         print("Something must be wrong!!!")
         return
     if ((len(matches) / len(inp1)) * 100 > percentage):
-        return True
-    return False
+        return (len(matches) / len(inp1)) * 100
+    return (len(matches) / len(inp1)) * 100
 
