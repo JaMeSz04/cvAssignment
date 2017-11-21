@@ -85,28 +85,28 @@ def extractBoom(img):
 
     # In[10]:
 
-    for coor in someMn:
-        for x in range(-5, 5):
-            rgbImg[coor[0] + x, coor[1]] = (0, 0, 255)
-        for y in range(-5, 5):
-            rgbImg[coor[0], coor[1] + y] = (0, 0, 255)
-
-    # In[11]:
-
-    allPoints = cv2.cvtColor(img, cv2.COLOR_GRAY2RGB)
-
-    # In[12]:
-
-    for coor in mnPoints1:
-        for x in range(-1, 1):
-            allPoints[coor[0] + x, coor[1]] = (0, 0, 255)
-        for y in range(-1, 1):
-            allPoints[coor[0], coor[1] + y] = (0, 0, 255)
-    for coor in mnPoints3:
-        for x in range(-1, 1):
-            allPoints[coor[0] + x, coor[1]] = (255, 0, 0)
-        for y in range(-1, 1):
-            allPoints[coor[0], coor[1] + y] = (255, 0, 0)
+    # for coor in someMn:
+    #     for x in range(-1, 1):
+    #         rgbImg[coor[0] + x, coor[1]] = (0, 0, 255)
+    #     for y in range(-1, 1):
+    #         rgbImg[coor[0], coor[1] + y] = (0, 0, 255)
+    #
+    # # In[11]:
+    #
+    # allPoints = cv2.cvtColor(img, cv2.COLOR_GRAY2RGB)
+    #
+    # # In[12]:
+    #
+    # for coor in mnPoints1:
+    #     for x in range(-1, 1):
+    #         allPoints[coor[0] + x, coor[1]] = (0, 0, 255)
+    #     for y in range(-1, 1):
+    #         allPoints[coor[0], coor[1] + y] = (0, 0, 255)
+    # for coor in mnPoints3:
+    #     for x in range(-1, 1):
+    #         allPoints[coor[0] + x, coor[1]] = (255, 0, 0)
+    #     for y in range(-1, 1):
+    #         allPoints[coor[0], coor[1] + y] = (255, 0, 0)
 
 
             # In[13]:

@@ -30,8 +30,8 @@ def match(img, img2):
     out2 = segmentation(img2, 120)
     # cv2.imshow("segmentation", out)
     # cv2.imshow("segmentation2", out2)
-    cv2.imwrite("segmented/seg.BMP", out)
-    cv2.imwrite("segmented/seg2.BMP", out2)
+    cv2.imwrite("./seg.BMP", out)
+    cv2.imwrite("./seg2.BMP", out2)
 
     #
     # # initialize the list of threshold methods
@@ -50,8 +50,8 @@ def match(img, img2):
     # 	cv2.waitKey(0)
     # ################################ FpEnhancer ###############################
     #
-    sourceImage = "segmented/seg.BMP"
-    sourceImage2 = "segmented/seg2.BMP"
+    sourceImage = "./seg.BMP"
+    sourceImage2 = "./seg2.BMP"
     # np.set_printoptions(
     #     threshold=np.inf,
     #     precision=4,
@@ -139,5 +139,5 @@ def match(img, img2):
 
 
 
-match(images[0],images[1])
+# match(images[0],images[1])
 
